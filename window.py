@@ -24,7 +24,7 @@ class App(QMainWindow, form_class):
         _menubar = self.menuBar()
         menu1 = _menubar.addMenu('설정')
         mode_1 = QAction('Nyaa', self)
-        mode_2 = QAction('Sukebei',self)
+        mode_2 = QAction('Sukebei', self)
 
         mode_1.setCheckable(True)
         mode_2.setCheckable(True)
@@ -38,7 +38,6 @@ class App(QMainWindow, form_class):
         mode_2.triggered.connect(self.change_mode)
         menu1.addAction(mode_1)
         menu1.addAction(mode_2)
-
 
     def change_mode(self):
         global search_mod
@@ -68,6 +67,8 @@ class App(QMainWindow, form_class):
         self.statusBar().showMessage('대기중')
         # 검색 버튼
         self.pushButton.clicked.connect(self.search)
+        # 엔터 쳤을 때
+        self.lineEdit.returnPressed.connect(self.search)
         self.show()
 
     def search(self):
@@ -90,6 +91,7 @@ class App(QMainWindow, form_class):
         self.refresh_table(url)
 
     def refresh_table(self, url):
+        global row_size
         table = self.tableWidget
         table.clearContents()
         target = requests.get(url)
@@ -112,7 +114,7 @@ class App(QMainWindow, form_class):
         print(len(pages))
         # print(table_row[1])
         table.setRowCount(len(table_row))
-        self.row_size = len(table_row)
+        row_size = len(table_row)
         for i in range(len(table_row)):
             print(table_row[i])
             line = table_row[i].find_all('td')
@@ -137,7 +139,7 @@ class App(QMainWindow, form_class):
                 if j == 2:
                     # 마그넷
                     link = QLabel()
-                    _url = '<a href="'+_list[j]+'">링크</a>'
+                    _url = '<a href="' + _list[j] + '">링크</a>'
                     link.setText(_url)
                     link.setOpenExternalLinks(True)
                     link.setAlignment(QtCore.Qt.AlignCenter)
